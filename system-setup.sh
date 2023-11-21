@@ -4,10 +4,10 @@
 # This is a bash script for configuring Ubuntu 22.04 (jammy).
 # ---------------------------
 #
-# FIRST: Run this command BEFORE to configure your system audio setup with wine and winetricks:
+# STEP 1: Run this command to configure your system audio setup with wine and winetricks:
 # wget -O ~/install-audio.sh https://raw.githubusercontent.com/brendaningram/linux-audio-setup-scripts/main/ubuntu/2204/install-audio.sh && chmod +x ~/install-audio.sh && ~/install-audio.sh
 #
-# THEN: Run this to execute this script:
+# STEP 2: Run this command to execute this script:
 # wget -O ~/system-setup.sh https://raw.githubusercontent.com/fcastrovilli/linux-setup-scripts/main/system-setup.sh && chmod +x ~/system-setup.sh && ~/system-setup.sh
 
 
@@ -25,7 +25,8 @@ notify () {
 # ---------------------------
 notify "Update and Install generic deps"
 sudo apt update && sudo apt dist-upgrade -y
-sudo apt install git curl wget gpg gnome-sushi -y
+sudo apt install git curl wget gpg gnome-sushi gnome-tweaks -y
+sudo apt autoremove -y
 
 # ---------------------------
 # GUI
@@ -52,10 +53,12 @@ EOF
 dconf load / < ~/gui-setting.ini
 
 # ---------------------------
-# Ulauncher
+# SSH
 # ---------------------------
-notify "Ulauncher"
-sudo add-apt-repository universe -y && sudo add-apt-repository ppa:agornostal/ulauncher -y && sudo apt update && sudo apt install ulauncher -y
+notify "SSH"
+ssh-keygen -t ed25519 -C "$(hostname)"
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
 
 # ---------------------------
 # VSCode
@@ -64,18 +67,45 @@ notify "VSCode"
 sudo snap install --classic code
 
 # ---------------------------
+# GitHub Desktop
+# ---------------------------
+notify "GitHub Desktop"
+cd ~/Downloads
+wget https://github.com/shiftkey/desktop/releases/download/release-3.3.3-linux2/GitHubDesktop-linux-amd64-3.3.3-linux2.deb
+sudo dpkg -i GitHubDesktop-linux-amd64-3.3.3-linux2.deb
+sudo rm GitHubDesktop-linux-amd64-3.3.3-linux2.deb
+
+# ---------------------------
+# Obsidian
+# ---------------------------
+notify "Obsidian"
+cd ~/Downloads
+wget https://github.com/obsidianmd/obsidian-releases/releases/download/v1.4.16/obsidian_1.4.16_amd64.deb
+sudo dpkg -i obsidian_1.4.16_amd64.deb
+sudo rm obsidian_1.4.16_amd64.deb
+
+# ---------------------------
 # Chrome
 # ---------------------------
 notify "Google Chrome"
 cd ~/Downloads 
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i google-chrome-stable_current_amd64.deb
+sudo rm google-chrome-stable_current_amd64.deb
 
 # ---------------------------
 # VLC
 # ---------------------------
 notify "VLC"
 sudo snap install vlc
+
+# ---------------------------
+# QBitTorrent
+# ---------------------------
+notify "QBitTorrent"
+sudo add-apt-repository ppa:qbittorrent-team/qbittorrent-stable -y
+sudo apt update
+sudo apt install qbittorrent -y
 
 # ---------------------------
 # Ableton 11
@@ -90,6 +120,12 @@ wine64 Ableton\ Live\ 11\ Suite\ Installer.exe
 cd ..
 rm -rf ./ableton11_installer/
 rm ableton.zip
+
+# ---------------------------
+# Ulauncher
+# ---------------------------
+notify "Ulauncher"
+sudo add-apt-repository universe -y && sudo add-apt-repository ppa:agornostal/ulauncher -y && sudo apt update && sudo apt install ulauncher -y
 
 # ---------------------------
 # Docker
@@ -108,13 +144,13 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo groupadd docker
 sudo usermod -aG docker $USER
-newgrp docker
 
 # ---------------------------
 # Cleanup
 # ---------------------------
 notify "Cleanup"
 sudo apt autoremove -y
+sudo apt-get autoclean -y
 
 # ---------------------------
 # OhMyZSH
