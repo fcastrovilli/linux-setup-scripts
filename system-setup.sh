@@ -25,7 +25,7 @@ notify () {
 # ---------------------------
 notify "Update and Install generic deps"
 sudo apt update && sudo apt dist-upgrade -y
-sudo apt install git curl wget gpg gnome-sushi gnome-tweaks -y
+sudo apt install git curl wget gpg gnome-sushi gnome-tweaks make -y
 sudo apt autoremove -y
 
 # ---------------------------
@@ -51,6 +51,14 @@ multi-monitor=true
 EOF
 
 dconf load / < ~/gui-setting.ini
+
+# ---------------------------
+# OhMyZSH
+# ---------------------------
+notify "ZSH & OhMyZSH"
+sudo apt install zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+source $HOME/.bash_aliases
 
 # ---------------------------
 # SSH
@@ -151,11 +159,3 @@ sudo usermod -aG docker $USER
 notify "Cleanup"
 sudo apt autoremove -y
 sudo apt-get autoclean -y
-
-# ---------------------------
-# OhMyZSH
-# ---------------------------
-notify "ZSH & OhMyZSH"
-sudo apt install zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-source $HOME/.bash_aliases
