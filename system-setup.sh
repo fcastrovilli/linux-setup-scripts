@@ -158,3 +158,4 @@ sudo apt-get autoclean -y
 notify "ZSH & OhMyZSH"
 sudo apt install zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+source $HOME/.bash_aliases
