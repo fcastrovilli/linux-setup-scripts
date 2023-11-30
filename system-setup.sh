@@ -58,7 +58,6 @@ dconf load / < ~/gui-setting.ini
 notify "ZSH & OhMyZSH"
 sudo apt install zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-source $HOME/.bash_aliases
 
 # ---------------------------
 # SSH
@@ -91,6 +90,12 @@ cd ~/Downloads
 wget https://github.com/obsidianmd/obsidian-releases/releases/download/v1.4.16/obsidian_1.4.16_amd64.deb
 sudo dpkg -i obsidian_1.4.16_amd64.deb
 sudo rm obsidian_1.4.16_amd64.deb
+
+# ---------------------------
+# Telegram
+# ---------------------------
+notify "Telegram"
+sudo snap install telegram-desktop
 
 # ---------------------------
 # Chrome
@@ -150,7 +155,6 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-sudo groupadd docker
 sudo usermod -aG docker $USER
 
 # ---------------------------
